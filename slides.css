@@ -1,0 +1,62 @@
+.footnote {
+  position: absolute;
+  font-size: 80%;
+  bottom: 3em;
+  left: 80px;
+}
+
+.ref {
+  font-size: 70%;
+  vertical-align: super;
+  color: yellow;
+  margin-left: 4px;
+}
+
+body {
+  font-family: 'Droid Serif';
+}
+
+h1, h2, h3 {
+  font-family: 'Yanone Kaffeesatz';
+  font-weight: 400;
+  margin-bottom: 0;
+  color: white;
+  text-shadow: 0 0 20px #333;
+}
+
+blockquote {
+  border-left: 10px solid green;
+  padding-left: 10px;
+  margin-left: 8px;
+}
+
+a {
+  color: cyan;
+}
+
+.remark-code, .remark-inline-code {
+  font-family: 'Ubuntu Mono';
+}
+
+.remark-slide-content {
+  background: #272822;
+  color: lightgray;
+}
+
+.blue {
+  color: #7778ff;
+}
+
+.red {
+  color: #ff7778;
+}
+
+.green {
+  color: #77ff78;
+}
+
+.inverse {
+  color: #272822;
+  background: #777872;
+  text-shadow: 0 0 20px #333;
+}
