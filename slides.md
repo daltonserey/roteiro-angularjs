@@ -592,9 +592,14 @@ use a sintaxe abaixo .green[para declarar/criar] novos módulos…
 ```javascript
 (function () {
   const app = angular.module('mural');
-  app.controller('AppCtrl', function AppCtrl() {
+  app.controller('MensagensCtrl', function MensagensCtrl() {
     const vm = this;
-    vm.msg = "oi (vindo do controller)";
+    vm.mensagens = [
+        {autor: "fulano",    texto: "mensagem 1"},
+        {autor: "beltrano",  texto: "outra mensagem"},
+        {autor: "sicrano",   texto: "terceira mensagem"},
+        {autor: "beltrano",  texto: "quarta mensagem"}
+    ];
   });
 }());
 ```
