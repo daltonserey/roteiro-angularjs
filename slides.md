@@ -613,3 +613,128 @@ atualize os scripts que devem ser lidos pela aplicação
 
 > Observe que os scripts devem ser lidos nessa ordem, por conta
 > da ordem de declaração e uso do módulo `mural`.
+
+---
+class: middle, center, inverse
+# parte 4
+## serviços, models e injeção de dependências
+
+---
+# serviços
+
+> _Services_ (ou _providers_) em AngularJS são objetos cujo tempo
+> de vida _persiste_ ao longo de toda uma sessão de uso da
+> aplicação. Compare isso com controllers (ou view-models) que
+> são destruídos sempre que o nó correspondente é eliminado do
+> DOM. Isso torna os _services_ o melhor lugar para armazenar
+> _models_ (no sentido MVC) da aplicação.
+>
+> Além disso, uma vez registrados, services podem ser facilmente
+> _injetados_ em controllers, de forma que permitem compartilhar
+> os _models_ ou outros dados entre controllers e outros
+> serviços.
+
+> Infelizmente, Angular provê 5 “receitas” para registrar
+> serviços. Essas receitas são: _value_, _factory_, _service_,
+> _provder_ e _constant_. Todas elas compartilham algo em comum:
+> apenas um único objeto será criado, no primeiro uso do
+> service. A partir daí, o mesmo objeto será compartilhado sempre
+> que for requisitado.
+
+---
+# factory
+
+> O método `factory` de um módulo angular permite registrar um
+> serviço de forma extremamente simples. Consiste em passar para
+> o método o nome do serviço e uma função que constrói
+> (“fabrica”) o objeto _service_ propriamente dito. A receita
+> típica é semelhante a esta.
+
+```javascript
+(function () {
+    const app = angular.module('nome_app');
+    app.factory('NomeService', function () {
+        const service = {};
+
+        service.dados1 = ["x", "y", …, "z"];
+        service.dados2 = "msg";
+        service.metodo = function () {
+            …
+        };
+        return service;
+    });
+}());
+```
+
+> O código consiste simplesmente em criar o objeto `service`,
+> equipá-lo com os _properties_ necessários (possivelmente, dados
+> do servidor) e retornar o objeto. Mas, lembre, só um objeto
+> será criado.
+
+---
+# adicione um service ao mural
+
+> As mensagens do mural são o exemplo típico de dado (um _model_)
+> que precisa ser compartilhado por vários controllers. Vamos,
+> portanto, refatorar nosso código, levando os dados para um
+> service. Para isso, crie o service abaixo.
+
+```javascript
+(function () {
+    const app = angular.module('mural');
+
+    app.service('Mensagens', function MensagensCtrl() {
+        const service = {};
+        service.mensagens = [
+            {autor: "fulano",    texto: "mensagem 1"},
+            {autor: "beltrano",  texto: "outra mensagem"},
+            {autor: "sicrano",   texto: "terceira mensagem"},
+            {autor: "beltrano",  texto: "quarta mensagem"}
+        ];
+        return service;
+    });
+}());
+```
+
+> Lembre-se de complementar isso, atualizando o index.html com o
+> arquivo desse service. Sugestão: nomeie o arquivo
+> .green[`mensagens-service.js`].
+
+---
+# injeção de dependência
+
+> Uma vez criado o service, podemos usá-lo nos controllers ou até
+> em outros serviços. Para isso, precisamos usar _injeção de
+> dependência_. Felizmente, é só um nome sofisticado para algo
+> super simples. A ideia é que você “peça” a angular que o
+> serviço seja “injetado” via passagem de parâmetros. Assim,
+> quando angular instanciar seu controller ele criará (ou
+> recuperará) o serviço nomeado e o passará como parâmetro para a
+> função construtora do controller. Isso é feito simplesmente
+> adicionando o parâmetro com o nome do serviço a seu controller.
+> Relembre, como exemplo, o exercício em que usamos `$timeout`.
+> Faremos da mesma forma com os serviços que criarmos.
+
+---
+# injete o serviço Mensagens ao controller
+
+> Assim, para adicionar o serviço `Mensagens` que criamos no
+> slide anterior ao controller, basta reescrevermos o controller
+> da seguinte forma.
+
+```javascript
+(function () {
+    const app = angular.module('mural');
+
+    app.controller('MensagensCtrl', function MensagensCtrl(Mensagens) {
+        vm = this;
+        vm.adiciona_mensagem = function () {
+            vm.mensagens.push(vm.novo);
+        };
+        vm.mensagens = Mensagens.mensagens;
+    });
+}());
+```
+
+> Observe que nesta versão do código, optei por colocar a versão
+> em estilo _inlined_ no registro do controller.
