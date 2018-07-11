@@ -733,9 +733,6 @@ class: middle, center, inverse
 
     app.controller('MensagensCtrl', function MensagensCtrl(Mensagens) {
         vm = this;
-        vm.adiciona_mensagem = function () {
-            vm.mensagens.push(vm.novo);
-        };
         vm.mensagens = Mensagens.mensagens;
     });
 }());
